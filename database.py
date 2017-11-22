@@ -1,17 +1,27 @@
 import sqlite3
 
-# creates a db, what happens if dp already exists?// throws error
+# create databases for system
 connect = sqlite3.connect('Testdb.sqlite')
-
 db_cursor = connect.cursor()
 
+# create db tables
 db_cursor.executescript('''
-	DROP TABLE IF EXISTS Artist;
+	CREATE TABLE Player (
+		id  INTEGER NOT NULL PRIMARY KEY UNIQUE,
+		name TEXT,
+		note_player TEXT VARCHAR(255)
+		);
 	
-	CREATE TABLE Artist (
-		id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-		name TEXT
-	)	;''')
+	CREATE TABLE Session (
+		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+		player_id INTEGER,
+		begin DATETIME,
+		end DATETIME,
+		cash_in INTEGER,
+		cash_out INTEGER,
+		note_session VARCHAR(255)
+		);''')
 
+# save and close db
 connect.commit()
-#connect.close()
+connect.close()
