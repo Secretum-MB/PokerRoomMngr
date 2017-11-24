@@ -1,7 +1,7 @@
 import sqlite3
 
 # create databases for system
-connect = sqlite3.connect('Testdb.sqlite')
+connect = sqlite3.connect('Poker.sqlite')
 db_cursor = connect.cursor()
 
 # create db tables
@@ -17,10 +17,20 @@ db_cursor.executescript('''
 		player_id INTEGER,
 		begin DATETIME,
 		end DATETIME,
+        game VARCHAR(5),
+        stakes VARCHAR(5),
 		cash_in INTEGER,
 		cash_out INTEGER,
 		note_session VARCHAR(255)
-		);''')
+		);
+    
+    CREATE TABLE Xlation (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        field VARCHAR(15),
+        value VARCHAR(15),
+        description VARCHAR(30)
+        );''')
+    
 
 # save and close db
 connect.commit()
