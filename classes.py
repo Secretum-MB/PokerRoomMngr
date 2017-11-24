@@ -18,6 +18,7 @@ class Table:
         self.size = None
         self.location = None
         self.seat_count = 8
+        self.seat_status = [0 for i in range(self.seat_count)]
         self.stakes = None
         Table.table_identification += 1
 
@@ -33,20 +34,34 @@ class Table:
         return self.stakes
     def get_TableGameType(self):
         return self.game_type
+    def get_SeatStatus(self):
+        return self.seat_status
     
     def set_TableSize(self, size):
         self.size = size
+    
     def set_TableLocation(self, location):
         self.location = location
+    
     def set_TableSeatCount(self, delta):
         self.seat_count += delta
+        if delta > 0:
+            self.seat_status.extend([0 for i in range(delta)])
+        else:
+            for _ in range(abs(delta)):
+                self.seat_status.pop()
+
     def set_TableStakes(self, stakes):
         self.stakes = stakes
+    
     def set_TableGameType(self, game_type):
         self.game_type = game_type
+    
+    def set_SeatStatus(self, seat):
+        self.seat_status[seat-1] = (self.seat_status[seat-1] + 1) % 2
 
 
-class Player:
+class Member_Player:
     def __init__(self, player_id, player_name, player_notes=None):
         self.player_id = player_id
         self.player_name = player_name
@@ -76,7 +91,7 @@ class Player:
         return self.cash_out
 
     def set_PlayerName(self, name):
-        self.player_name = name # we only want to allow this for non-member guests
+        self.player_name = name # we may need to create an initial association
     def set_PlayerNotes(self, note):
         try:    self.player_notes += note
         except: self.player_notes = note
@@ -89,7 +104,7 @@ class Player:
         try:    self.buy_in += amount
         except: self.buy_in = amount
     def set_PlayerCashOut(self, amount):
-        self.cash_out = amount  # Going south allowed?
+        self.cash_out = amount
     
     
 class Non_Member_Player():
@@ -120,25 +135,6 @@ class Non_Member_Player():
     # we want to store for this player his logon time, his cum buy ins, and his name, player note
     # we will not be saving any of this data
     # will he have a player id?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-mathias = Player(1,'Mathias')
-
-
-
 
 
     

@@ -14,6 +14,9 @@ db.cur.execute('INSERT INTO Session (player_id, begin, cash_in, note_session) VA
                 player1.get_PlayerBuyIn(), player1.get_PlayerSessionNotes(), ))
 
 
+def non_member_logon(name, table_no, seat_no):
+    
 
-db.conn.commit()
-db.conn.close()
+
+#db.conn.commit()
+#db.conn.close()
