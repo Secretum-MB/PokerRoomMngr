@@ -38,9 +38,9 @@ class Table:
 
     def set_TableSize(self, size):
         self.size = size
-    
+
     def set_TableLocation(self, location):
-        self.location = location 
+        self.location = location
     def set_TableSeatCount(self, delta):
         self.seat_count += delta
         if delta > 0:
@@ -83,7 +83,7 @@ class Member_Player:
         self.buy_in = None
         self.cash_out = None
         self.table_seat = None
-        
+
     def get_PlayerId(self):
         return self.player_id
     def get_PlayerName(self):
@@ -108,10 +108,10 @@ class Member_Player:
     def set_PlayerName(self, name):
         self.player_name = name # we may need to create an initial association
     def set_PlayerNotes(self, note):
-        try:    self.player_notes += note
+        try:    self.player_notes += ' ' + note
         except: self.player_notes = note
     def set_PlayerSessionNotes(self, note):
-        try:    self.session_notes += note
+        try:    self.session_notes += ' ' + note
         except: self.session_notes = note
     def set_PlayerSessionId(self, Id):
         self.session_id = Id
@@ -163,10 +163,10 @@ class Non_Member_Player():
         try:    self.buy_in += amount
         except: self.buy_in = amount
 
-        
+
     # we want to store for this player his logon time, his cum buy ins, and his name, player note
     # we will not be saving any of this data
     # will he have a player id?
 
 
-    
+
