@@ -5,7 +5,7 @@
 
 # todo:
 # find a way to delete a table / player (post session)
-# changing tables to one of a different stakes should not be allowed
+# changing seat to new stakes requires creating new object
 # how to populate Player table.. at time of session create?
 # to incorporate non-member player.. do we have two classe inherit methods from a super class?
 
@@ -36,6 +36,22 @@ def table_change_location():
 
 def table_remove(table):
     pass
+
+
+
+def member_exist_db(player_id, player_name):
+    # check to see if player alrady exists in Player table of db
+    query = db.cur.execute('SELECT COUNT(id) FROM Player WHERE id = (?)',
+                           (player_id, ))
+    query_result = query.fetchall()[0][0]
+
+    # if player exists, return; otherwise, create record for player
+    if query_result == 1:
+        return
+    
+    else:
+        db.cur.execute('''INSERT INTO Player (id, name) VALUES (?,?)''',
+                       (player_id, player_name, ))
 
 
 def member_session_start(player_id, player_name, cash_in,
@@ -79,7 +95,7 @@ def member_session_addNote(player, note):
     player.set_PlayerSessionNotes(note)
     db.cur.execute(
             '''UPDATE Session SET note_session = (?) WHERE id = (?)
-            ''', (note, player.get_PlayerSessionId(), ))
+            ''', (player.get_PlayerSessionNotes(), player.get_PlayerSessionId(), ))
 
     db.conn.commit()
 
@@ -94,11 +110,6 @@ def member_session_cash_add(player, amount):
 
 
 def member_change_table_seat(player, table_seat, cash_out=None, cash_in=None):
-    #issues: session note is going on first session not appropriate one
-    # playe is staying on first table too..
-    # player seems to keep original session attributes too
-
-
     # if table change entails stake change, need to terminate session and create new
     prior_stakes = player.get_PlayerTableSeat()[0].get_TableStakes()
     new_stakes = table_seat[0].get_TableStakes()
@@ -137,9 +148,6 @@ def member_change_table_seat(player, table_seat, cash_out=None, cash_in=None):
                                     table_seat, game_type, new_stakes)
 
 
-
-
-
 def member_session_end(player, cash_out=None):
     # todo: garbage collect player at end of function
     player.set_PlayerCashOut(cash_out)
@@ -166,14 +174,11 @@ bob = member_session_start(player_id=10, player_name='Bob', cash_in=200,
                            game_type=tbl_1.get_TableGameType(),
                            stake=tbl_1.get_TableStakes())
 
+member_exist_db(player_id=10, player_name='Bob')
 
-member_session_addNote(bob, 'really wants 5-10')
-member_change_table_seat(bob, (tbl_3, 5), cash_out=350, cash_in=500)
-member_session_addNote(bob, 'super happy now!!')
 
-print(tbl_1)
-print(tbl_3)
-print(bob)
+
+
 
 #db.conn.commit()
 #db.conn.close()
